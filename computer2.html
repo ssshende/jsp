@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Jayawantrao Sawant Polytechnic - Student Database</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#172033}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{width:255px;background:#172033;color:#fff;padding:20px;flex-shrink:0}
+.brand{text-align:center;padding-bottom:20px;border-bottom:1px solid #ffffff22}
+.brand-logo{width:55px;height:55px;border-radius:12px;background:#2563eb;display:flex;align-items:center;justify-content:center;margin:auto;font-weight:bold;font-size:20px}
+.brand h2{font-size:17px;margin:12px 0 5px}.brand p{margin:0;color:#cbd5e1;font-size:12px}
+.nav{margin-top:20px}.nav button{display:block;width:100%;border:0;background:transparent;color:#e2e8f0;text-align:left;padding:12px;border-radius:8px;margin:5px 0}.nav button:hover,.nav button.active{background:#2563eb;color:white}.nav-icon{display:inline-block;width:28px}
+.main{flex:1;min-width:0}.topbar{background:#fff;padding:18px 25px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e2e8f0}.top-title h1{font-size:21px;margin:0}.top-title p{margin:5px 0 0;color:#64748b;font-size:13px}.college-badge{background:#e8f0ff;color:#2563eb;padding:10px 15px;border-radius:9px;font-weight:bold}.content{padding:25px;max-width:1400px;margin:auto}
+.card{background:#fff;border-radius:12px;box-shadow:0 3px 15px #0000000d;margin-bottom:20px;overflow:hidden}.card-header{padding:20px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center}.card-header h2{margin:0;font-size:19px}.card-header p{margin:6px 0 0;color:#64748b;font-size:13px}.card-body{padding:20px}
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:20px}.stat-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 3px 15px #0000000d;display:flex;justify-content:space-between;align-items:center}.stat-info small{color:#64748b}.stat-info strong{display:block;font-size:28px;margin-top:8px}.stat-icon{width:45px;height:45px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;background:#e8f0ff}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}.field input,.field select,.field textarea,input,select,textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;background:#fff}.field textarea{min-height:85px;resize:vertical}.full{grid-column:1/-1}.info-section{border:1px solid #e2e8f0;border-radius:10px;margin-bottom:18px;overflow:hidden}.section-title{padding:13px 16px;background:#f8fafc;font-weight:bold;display:flex;gap:10px;align-items:center}.section-number{width:28px;height:28px;border-radius:50%;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center}.section-content{padding:18px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.btn{border:0;border-radius:7px;padding:10px 15px}.btn-primary{background:#2563eb;color:white}.btn-warning{background:#f59e0b;color:white}.btn-success{background:#16a34a;color:white}.btn-danger{background:#dc2626;color:white}.btn-light{background:#e2e8f0;color:#172033}.table-wrap{overflow:auto}.search{margin-bottom:15px}.search input{max-width:450px}.table{width:100%;border-collapse:collapse;min-width:900px}.table th,.table td{padding:10px;border-bottom:1px solid #e2e8f0;text-align:left}.table th{background:#f1f5f9}.badge{display:inline-block;padding:5px 8px;border-radius:6px;background:#dbeafe;color:#1d4ed8;font-size:11px}.toast{position:fixed;right:20px;bottom:20px;background:#172033;color:#fff;padding:13px 18px;border-radius:8px;box-shadow:0 5px 20px #0003;z-index:99}.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:#f4f7fb}.login-card{width:430px;background:#fff;border-radius:14px;box-shadow:0 8px 30px #00000014;padding:30px}.login-card h1{text-align:center;margin:10px 0 5px}.login-card .subtitle{text-align:center;color:#64748b;margin-bottom:25px}.role-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}.role-btn{padding:12px;border:1px solid #cbd5e1;background:#fff;border-radius:8px}.role-btn.active{background:#2563eb;color:#fff;border-color:#2563eb}.login-card label{display:block;font-size:13px;font-weight:bold;margin:10px 0 5px}.login-card input{margin-bottom:5px}.student-only-note{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:12px;border-radius:8px;font-size:12px;margin-bottom:15px}.login-error{color:#dc2626;font-size:13px;min-height:20px;margin:8px 0}.mobile-menu{display:none}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid #ffffff66;border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f4f7fb;font-size:16px;color:#475569}
+
+.field label .req{color:#dc2626;font-weight:bold;margin-left:2px}
+.field input:required:invalid,.field select:required:invalid,.field textarea:required:invalid{border-color:#fca5a5}
+.field input:required:valid,.field select:required:valid,.field textarea:required:valid{border-color:#86efac}
+.validation-banner{display:none;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:14px 16px;border-radius:10px;margin-bottom:18px;font-size:13px}
+.validation-banner.show{display:block}
+.validation-banner strong{display:block;margin-bottom:8px;font-size:14px}
+.validation-banner ul{margin:0;padding-left:20px}
+.validation-banner li{margin:3px 0}
+.field.has-error input,.field.has-error select,.field.has-error textarea{border-color:#dc2626;background:#fef2f2}
+
+.print-panel{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:18px}
+.print-panel .pp-title{font-weight:bold;margin-bottom:10px;color:#172033}
+.print-panel .pp-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.print-panel .pp-group{min-width:200px}
+.print-panel .pp-label{display:block;font-size:12px;font-weight:bold;margin-bottom:5px}
+.print-panel .pp-controls{display:flex;gap:6px}
+.print-panel select{flex:1;padding:9px 10px;border:1px solid #cbd5e1;border-radius:7px;background:#fff}
+
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  body{background:#fff;color:#000}
+  body *{visibility:hidden}
+  #printArea,#printArea *{visibility:visible}
+  #printArea{position:absolute;left:0;top:0;width:100%;background:#fff;padding:0}
+  #printArea .print-header{text-align:center;margin-bottom:12px}
+  #printArea .print-header h1{font-size:18px;margin:0 0 4px}
+  #printArea .print-header h2{font-size:14px;margin:0 0 4px}
+  #printArea .print-header p{font-size:11px;margin:0}
+  #printArea table{width:100%;border-collapse:collapse;font-size:8px;table-layout:auto}
+  #printArea th,#printArea td{border:1px solid #333;padding:4px 3px;text-align:left;vertical-align:top;word-break:break-word}
+  #printArea th{font-weight:bold}
+  #printArea .print-footer{margin-top:10px;font-size:9px;text-align:right}
+}
+
+@media(max-width:800px){.sidebar{width:210px}.form-grid{grid-template-columns:1fr}.mobile-menu{display:block}.top-title h1{font-size:16px}}
+@media(max-width:600px){.app{display:block}.sidebar{width:100%}.content{padding:15px}.topbar{padding:15px}.college-badge{display:none}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+/* ============================================================
+   ⚠️ REPLACE THIS LINE with your Google Apps Script Web App URL
+   ============================================================ */
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxixLL6JVZABlMQR1moCaSqp3OIbk3ukb6sadTQfpUBCfCXKxoS4la63CZ8eBJ2BYeq/exec';
+
+const DEFAULT_ADMIN_USERNAME = "admin";
+const DEFAULT_ADMIN_PASSWORD = "Admin@123";
+
+let adminCredentials = { username: DEFAULT_ADMIN_USERNAME, password: DEFAULT_ADMIN_PASSWORD };
+
+const defaultForm = {
+  academicYear:"", rollNo:"", enrollmentNo:"", firstName:"", middleName:"", lastName:"",
+  gender:"", studentCategory:"", birthDate:"", studentContact:"", parentsContact:"",
+  motherContact:"", email:"", bloodGroup:"", className:"",
+  currentAddress:"", permanentAddress:""
+};
+
+const FIELD_LABELS = {
+  academicYear:"Academic Year", rollNo:"Roll No", enrollmentNo:"Enrollment No",
+  firstName:"First Name", middleName:"Middle Name", lastName:"Last Name",
+  gender:"Gender", studentCategory:"Students Category", birthDate:"Birth Date",
+  studentContact:"Student Contact Number", parentsContact:"Parents Contact Number",
+  motherContact:"Mother's Contact Number", email:"Email", bloodGroup:"Blood Group",
+  className:"Class", currentAddress:"Current Address", permanentAddress:"Permanent Address"
+};
+
+const CLASSES = ["FYCO1","FYCO2","FYCO3","SYCO1","SYCO2","SYCO3","TYCO1","TYCO2","TYCO3"];
+const YEARS   = ["2026-27","2027-28","2028-29","2029-30"];
+const CATEGORIES = ["SC","ST","SEBC","Open","OBC","NT1","NT2","NT3","VJNT","Other"];
+const BLOOD_GROUPS = ["A+","A-","B+","B-","AB+","AB-","O+","O-"];
+
+let students = [];
+let dataLoaded = false;
+let session = null;
+let page = "dashboard";
+let loginRole = "student";
+let editIndex = null;
+let toastTimer = null;
+
+/* ============ API ============ */
+async function apiGet(action) {
+  const res = await fetch(SCRIPT_URL + "?action=" + action + "&t=" + Date.now());
+  return await res.json();
+}
+async function apiPost(payload) {
+  await fetch(SCRIPT_URL, {
+    method: "POST", mode: "no-cors",
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify(payload)
+  });
+}
+async function loadStudentsFromSheet() {
+  try {
+    const data = await apiGet("getAll");
+    if (data.result === "success" && Array.isArray(data.students)) students = data.students;
+  } catch (e) { console.error("Load students failed:", e); }
+  dataLoaded = true;
+}
+async function loadCredentialsFromSheet() {
+  try {
+    const data = await apiGet("getCredentials");
+    if (data.result === "success" && data.credentials) adminCredentials = data.credentials;
+  } catch (e) { console.error("Load credentials failed:", e); }
+}
+
+/* ============ UTILS ============ */
+function esc(v){return String(v??"").replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[x]))}
+function showToast(msg){clearTimeout(toastTimer);let d=document.createElement("div");d.className="toast";d.textContent=msg;document.body.appendChild(d);toastTimer=setTimeout(()=>d.remove(),2600)}
+function getField(id){return document.getElementById(id)?.value.trim()||""}
+
+/* ============ LOGIN ============ */
+function loginScreen(){
+  document.getElementById("root").innerHTML=`
+  <div class="login-screen">
+    <div class="login-card">
+      <div class="brand-logo">JS</div>
+      <h1>Jayawantrao Sawant Polytechnic</h1>
+      <div class="subtitle">Computer Engineering Student Database</div>
+      <div class="role-buttons">
+        <button class="role-btn ${loginRole==="admin"?"active":""}" onclick="setRole('admin')">🔐 Admin</button>
+        <button class="role-btn ${loginRole==="student"?"active":""}" onclick="setRole('student')">📝 Student</button>
+      </div>
+      ${loginRole==="admin"?`
+        <label>Admin Username</label>
+        <input id="username" type="text" autocomplete="off" placeholder="Enter Admin username">
+        <label>Admin Password</label>
+        <input id="password" type="password" autocomplete="off" placeholder="Enter Admin password">
+        <div id="loginError" class="login-error"></div>
+        <button id="loginBtn" class="btn btn-primary" style="width:100%" onclick="login()">Admin Login</button>
+      `:`
+        <div class="student-only-note">Students do not need Admin credentials. Select Student and continue to the Student Form.</div>
+        <label>Enrollment No <span style="color:#d00">*</span></label>
+        <input id="studentIdentity" type="text" placeholder="Enter your Enrollment No" required autocomplete="off">
+        <div id="loginError" class="login-error"></div>
+        <button class="btn btn-success" style="width:100%" onclick="login()">Open Student Form</button>
+      `}
+    </div>
+  </div>`;
+}
+function setRole(role){loginRole=role;loginScreen()}
+
+async function login(){
+  if(loginRole==="admin"){
+    const u=document.getElementById("username").value.trim();
+    const p=document.getElementById("password").value;
+    const btn=document.getElementById("loginBtn");
+    const err=document.getElementById("loginError");
+    btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Checking...'; err.textContent='';
+    await loadCredentialsFromSheet();
+    if(u===adminCredentials.username && p===adminCredentials.password){
+      session={role:"admin"}; page="dashboard";
+      btn.innerHTML='<span class="spinner"></span>Loading data...';
+      await loadStudentsFromSheet(); render(); return;
+    }
+    err.textContent="Invalid Admin username or password.";
+    btn.disabled=false; btn.textContent="Admin Login"; return;
+  }
+  const id=document.getElementById("studentIdentity").value.trim();
+  if(!id){ document.getElementById("loginError").textContent="Enrollment No is mandatory. Please enter your Enrollment No."; return; }
+  session={role:"student",identity:id}; page="studentForm";
+  if(!dataLoaded) await loadStudentsFromSheet();
+  render();
+}
+function logout(){session=null;page="dashboard";loginRole="student";editIndex=null;loginScreen()}
+function render(){ if(!session){loginScreen();return} if(session.role==="admin"){adminApp();return} studentApp(); }
+
+/* ============ ADMIN ============ */
+function adminApp(){
+ if(!dataLoaded){
+   document.getElementById("root").innerHTML='<div class="loading-screen"><span class="spinner" style="border-color:#2563eb66;border-top-color:#2563eb;width:24px;height:24px"></span>&nbsp;Loading data from Google Sheet...</div>';
+   loadStudentsFromSheet().then(()=>{ dataLoaded=true; adminApp(); }); return;
+ }
+ document.getElementById("root").innerHTML=`
+ <div class="app">
+  <aside class="sidebar">
+   <div class="brand"><div class="brand-logo">JS</div><h2>Jayawantrao Sawant Polytechnic</h2><p>Hadapsar, Pune</p></div>
+   <nav class="nav">
+    <button class="${page==="dashboard"?"active":""}" onclick="go('dashboard')"><span class="nav-icon">▦</span>Dashboard</button>
+    <button class="${page==="register"?"active":""}" onclick="go('register')"><span class="nav-icon">＋</span>${editIndex!==null?"Edit Student":"Register Student"}</button>
+    <button class="${page==="database"?"active":""}" onclick="go('database')"><span class="nav-icon">▤</span>Student Database</button>
+    <button onclick="exportCSV()"><span class="nav-icon">⇩</span>Export Excel/CSV</button>
+    <button onclick="downloadTemplate()"><span class="nav-icon">▥</span>Excel Template</button>
+    <button class="${page==="settings"?"active":""}" onclick="go('settings')"><span class="nav-icon">⚙</span>Settings</button>
+    <button class="${page==="changePassword"?"active":""}" onclick="go('changePassword')"><span class="nav-icon">🔑</span>Change Password</button>
+    <button onclick="logout()" style="margin-top:20px;background:#dc2626;color:#fff"><span class="nav-icon">↪</span>Logout</button>
+   </nav>
+  </aside>
+  <main class="main">
+   <header class="topbar">
+    <div class="top-title"><h1>Jayawantrao Sawant Polytechnic, Hadapsar, Pune</h1><p>Computer Engineering Student Database · Google Sheets</p></div>
+    <div class="college-badge">COMP · ADMIN</div>
+   </header>
+   <div class="content">${adminPage()}</div>
+  </main>
+ </div>`;
+ if(page==="register") populateForm();
+}
+function go(p){ if(p!=="register") editIndex=null; page=p; render(); }
+function adminPage(){
+ if(page==="register")return registerPage();
+ if(page==="database")return databasePage();
+ if(page==="settings")return settingsPage();
+ if(page==="changePassword")return changePasswordPage();
+ return dashboardPage();
+}
+function dashboardPage(){
+ const male=students.filter(s=>s.gender==="Male").length;
+ const female=students.filter(s=>s.gender==="Female").length;
+ const email=students.filter(s=>s.email).length;
+ const contact=students.filter(s=>s.studentContact).length;
+ return `<div class="dashboard-grid">
+  ${stat("Total Students",students.length,"👥")}
+  ${stat("Complete Information",students.filter(s=>s.firstName&&s.lastName&&s.email&&s.studentContact).length,"✓")}
+  ${stat("Male Students",male,"♂")}
+  ${stat("Female Students",female,"♀")}
+  ${stat("Students with Email",email,"✉")}
+  ${stat("With Contact Number",contact,"☎")}
+ </div>
+ <div class="card"><div class="card-header"><div><h2>Quick Actions</h2><p>Manage student records efficiently</p></div></div>
+ <div class="card-body"><div class="actions">
+ <button class="btn btn-primary" onclick="editIndex=null;go('register')">＋ Register Student</button>
+ <button class="btn btn-light" onclick="go('database')">▤ View Database</button>
+ <button class="btn btn-success" onclick="exportCSV()">⇩ Export Data</button>
+ <button class="btn btn-light" onclick="refreshData()">🔄 Refresh from Sheet</button>
+ </div></div></div>`;
+}
+function stat(t,v,i){return `<div class="stat-card"><div class="stat-info"><small>${t}</small><strong>${v}</strong></div><div class="stat-icon">${i}</div></div>`}
+function registerPage(){
+ return `<div class="card"><div class="card-header"><div><h2>${editIndex!==null?"Edit Student Record":"Student Registration"}</h2><p>${editIndex!==null?"Modify existing student information.":"Admin can add and manage student records."} All fields are compulsory.</p></div><span class="badge">ADMIN FULL ACCESS</span></div><div class="card-body">${formHTML("admin")}</div></div>`;
+}
+
+/* ============ FORM ============ */
+function formHTML(mode){
+  return `<form onsubmit="submitForm(event,'${mode}')" novalidate>
+  <div id="validationBanner" class="validation-banner"></div>
+  <div class="info-section"><div class="section-title"><div class="section-number">1</div><div>Academic Information</div></div><div class="section-content"><div class="form-grid">
+  ${selectField("Academic Year","academicYear",YEARS)}
+  </div></div></div>
+  <div class="info-section"><div class="section-title"><div class="section-number">2</div><div>Personal Information</div></div><div class="section-content"><div class="form-grid">
+  ${field("Roll No","rollNo","text")}
+  ${field("Enrollment No","enrollmentNo","text")}
+  ${field("First Name","firstName","text")}
+  ${field("Middle Name","middleName","text")}
+  ${field("Last Name","lastName","text")}
+  ${selectField("Gender","gender",["Male","Female","Other"])}
+  ${selectField("Students Category","studentCategory",CATEGORIES)}
+  ${field("Birth Date","birthDate","date")}
+  ${selectField("Blood Group","bloodGroup",BLOOD_GROUPS)}
+  ${selectField("Class","className",CLASSES)}
+  </div></div></div>
+  <div class="info-section"><div class="section-title"><div class="section-number">3</div><div>Contact Information</div></div><div class="section-content"><div class="form-grid">
+  ${field("Student Contact Number","studentContact","tel")}
+  ${field("Parents Contact Number","parentsContact","tel")}
+  ${field("Mother's Contact Number","motherContact","tel")}
+  ${field("Email","email","email")}
+  </div></div></div>
+  <div class="info-section"><div class="section-title"><div class="section-number">4</div><div>Address Information</div></div><div class="section-content"><div class="form-grid">
+  ${textareaField("Current Address","currentAddress")}
+  ${textareaField("Permanent Address","permanentAddress")}
+  </div></div></div>
+  <div class="actions">
+  <button class="btn ${editIndex!==null?"btn-warning":"btn-primary"}" type="submit" id="formSubmitBtn">${editIndex!==null?"Update Student Record":"Save Student"}</button>
+  <button class="btn btn-light" type="button" onclick="${mode==="admin"?(editIndex!==null?"cancelEdit()":"go('dashboard')"):"clearStudentForm()"}">${editIndex!==null?"Cancel":"Clear"}</button>
+  </div>
+  </form>`;
+}
+function field(label,id,type){return `<div class="field" data-field="${id}"><label>${label} <span class="req">*</span></label><input id="f_${id}" type="${type}" required></div>`}
+function selectField(label,id,items){return `<div class="field" data-field="${id}"><label>${label} <span class="req">*</span></label><select id="f_${id}" required><option value="">Select ${label}</option>${items.map(x=>`<option value="${x}">${x}</option>`).join("")}</select></div>`}
+function textareaField(label,id){return `<div class="field full" data-field="${id}"><label>${label} <span class="req">*</span></label><textarea id="f_${id}" required></textarea></div>`}
+
+function populateForm(){
+  if(editIndex===null) return;
+  const s=students[editIndex];
+  if(!s) return;
+  Object.keys(defaultForm).forEach(k=>{
+    const el=document.getElementById("f_"+k);
+    if(el) el.value=s[k]||"";
+  });
+  clearValidation();
+}
+function cancelEdit(){ editIndex=null; go("database"); }
+function readForm(){ let o={};Object.keys(defaultForm).forEach(k=>o[k]=getField("f_"+k));return o; }
+function clearValidation(){
+  const banner = document.getElementById("validationBanner");
+  if (banner) { banner.className = "validation-banner"; banner.innerHTML = ""; }
+  document.querySelectorAll(".field.has-error").forEach(el => el.classList.remove("has-error"));
+}
+
+async function submitForm(e,mode){
+ e.preventDefault();
+ clearValidation();
+ const s = readForm();
+
+ const missing = [];
+ Object.keys(FIELD_LABELS).forEach(k => {
+   if (!s[k] || !String(s[k]).trim()) missing.push({ key: k, label: FIELD_LABELS[k] });
+ });
+ if (missing.length > 0) { showValidationErrors(missing, "Please fill in all required fields:"); return; }
+
+ const errors = [];
+ if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email))
+   errors.push({ key:"email", label:"Email", reason:"Invalid email format (e.g. name@example.com)" });
+ const phoneRegex = /^[0-9+\-\s()]{6,20}$/;
+ if (!phoneRegex.test(s.studentContact)) errors.push({ key:"studentContact", label:"Student Contact Number", reason:"Must be 6–20 digits (+, -, spaces allowed)" });
+ if (!phoneRegex.test(s.parentsContact)) errors.push({ key:"parentsContact", label:"Parents Contact Number", reason:"Must be 6–20 digits (+, -, spaces allowed)" });
+ if (!phoneRegex.test(s.motherContact)) errors.push({ key:"motherContact", label:"Mother's Contact Number", reason:"Must be 6–20 digits (+, -, spaces allowed)" });
+ if (s.birthDate) {
+   const bd = new Date(s.birthDate), today = new Date();
+   if (bd > today) errors.push({ key:"birthDate", label:"Birth Date", reason:"Cannot be a future date" });
+ }
+ if (errors.length > 0) { showValidationErrors(errors, "Please correct the following:"); return; }
+
+ const btn = document.getElementById("formSubmitBtn");
+ if(btn){ btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Saving...'; }
+
+ if(mode==="admin"){
+   if(editIndex!==null){
+     const existing=students[editIndex];
+     s.id=existing.id;
+     await apiPost({ action:"update", ...s });
+     showToast("Student record updated successfully.");
+     editIndex=null;
+   }else{
+     s.id=Date.now().toString();
+     await apiPost({ action:"create", ...s });
+     showToast("Student registered successfully.");
+   }
+   await new Promise(r=>setTimeout(r,900));
+   await loadStudentsFromSheet();
+   go("database");
+ }else{
+   const duplicate=students.some(x=>x.rollNo && s.rollNo && String(x.rollNo).toLowerCase()===s.rollNo.toLowerCase());
+   if(duplicate){
+     showValidationErrors([{key:"rollNo",label:"Roll No",reason:"This Roll No already exists. Please contact Admin."}], "Duplicate record:");
+     if(btn){ btn.disabled=false; btn.textContent="Save Student"; }
+     return;
+   }
+   s.id=Date.now().toString();
+   await apiPost({ action:"create", ...s });
+   showToast("Student form submitted successfully.");
+   await new Promise(r=>setTimeout(r,900));
+   await loadStudentsFromSheet();
+   setTimeout(()=>{ goStudentForm(); },400);
+ }
+}
+
+function showValidationErrors(items, title){
+  const banner = document.getElementById("validationBanner");
+  if (!banner) return;
+  let html = `<strong>⚠️ ${esc(title)}</strong><ul>`;
+  items.forEach(it => {
+    const reason = it.reason ? ` — <em>${esc(it.reason)}</em>` : "";
+    html += `<li><b>${esc(it.label)}</b>${reason}</li>`;
+    const wrap = document.querySelector(`.field[data-field="${it.key}"]`);
+    if (wrap) wrap.classList.add("has-error");
+  });
+  html += `</ul>`;
+  banner.innerHTML = html;
+  banner.className = "validation-banner show";
+  const first = items[0];
+  const el = document.getElementById("f_" + first.key);
+  if (el) {
+    banner.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(()=> el.focus(), 250);
+  }
+}
+
+function clearStudentForm(){ document.querySelectorAll("[id^='f_']").forEach(x=>x.value=""); clearValidation(); }
+function goStudentForm(){page="studentForm";render();}
+
+/* ============ DATABASE ============ */
+function databasePage(){
+ return `<div class="card">
+  <div class="card-header">
+    <div><h2>Student Database</h2><p>Data synced live from Google Sheets. Admin has Edit / Delete access.</p></div>
+  </div>
+  <div class="card-body">
+
+  <div class="print-panel">
+    <div class="pp-title">🖨️ Print Options</div>
+    <div class="pp-row">
+
+      <div class="pp-group">
+        <label class="pp-label">Print by Class</label>
+        <div class="pp-controls">
+          <select id="printClass">
+            <option value="">Select Class</option>
+            ${CLASSES.map(c=>`<option>${c}</option>`).join("")}
+          </select>
+          <button class="btn btn-primary" onclick="printByClass()">Print</button>
+        </div>
+      </div>
+
+      <div class="pp-group">
+        <label class="pp-label">Print by Academic Year</label>
+        <div class="pp-controls">
+          <select id="printYear">
+            <option value="">Select Year</option>
+            ${YEARS.map(y=>`<option>${y}</option>`).join("")}
+          </select>
+          <button class="btn btn-primary" onclick="printByYear()">Print</button>
+        </div>
+      </div>
+
+      <div class="pp-group">
+        <label class="pp-label">&nbsp;</label>
+        <button class="btn btn-success" onclick="printDatabase()" style="width:100%;">🖨️ Print All Students</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="search" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <input id="search" placeholder="Search students..." oninput="filterRows()">
+    <button class="btn btn-light" onclick="refreshData()">🔄 Refresh</button>
+    <span class="badge" style="margin-left:auto;">${students.length} record(s)</span>
+  </div>
+
+  <div class="table-wrap"><table class="table" id="studentTable"><thead><tr>
+   <th>Academic Year</th><th>Roll No</th><th>Enrollment No</th><th>Name</th><th>Gender</th>
+   <th>Class</th><th>Email</th><th>Contact</th><th>Actions</th>
+  </tr></thead><tbody>${students.length?students.map((s,i)=>`<tr>
+   <td>${esc(s.academicYear)}</td>
+   <td>${esc(s.rollNo)}</td>
+   <td>${esc(s.enrollmentNo)}</td>
+   <td>${esc([s.firstName,s.middleName,s.lastName].filter(Boolean).join(" "))}</td>
+   <td>${esc(s.gender)}</td>
+   <td>${esc(s.className)}</td>
+   <td>${esc(s.email)}</td>
+   <td>${esc(s.studentContact)}</td>
+   <td style="white-space:nowrap">
+     <button class="btn btn-warning" onclick="editStudent(${i})">✏ Edit</button>
+     <button class="btn btn-primary" onclick="viewStudent(${i})">View</button>
+     <button class="btn btn-danger" onclick="deleteStudent(${i})">Delete</button>
+   </td>
+   </tr>`).join(""):`<tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:30px">No student records yet. Click "Register Student" to add the first one.</td></tr>`}</tbody></table></div>
+
+  </div>
+ </div>`;
+}
+function filterRows(){const q=document.getElementById("search").value.toLowerCase();document.querySelectorAll("#studentTable tbody tr").forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?"":"none")}
+function editStudent(i){ editIndex=i; page="register"; render(); }
+function viewStudent(i){
+ const s=students[i];
+ const entries=Object.entries(s).filter(([k])=>k!=="id").map(([k,v])=>k+": "+(v||"-")).join("\n");
+ alert(entries||"No information");
+}
+async function deleteStudent(i){
+  const s=students[i];
+  if(!s) return;
+  if(!confirm("Delete this student record?")) return;
+  await apiPost({ action:"delete", id: s.id });
+  students.splice(i,1); render();
+  await new Promise(r=>setTimeout(r,900));
+  await loadStudentsFromSheet(); render();
+  showToast("Student deleted.");
+}
+async function refreshData(){
+  showToast("Refreshing from Google Sheet...");
+  await loadStudentsFromSheet(); render();
+  showToast("Data refreshed.");
+}
+function settingsPage(){
+ return `<div class="card"><div class="card-header"><div><h2>Settings</h2><p>Student database controls</p></div></div><div class="card-body">
+ <p>These controls are available to Admin only.</p>
+ <div class="actions">
+   <button class="btn btn-light" onclick="refreshData()">🔄 Refresh from Google Sheet</button>
+   <button class="btn btn-danger" onclick="resetDatabase()">⚠ Reset All Student Records</button>
+ </div>
+ </div></div>`;
+}
+async function resetDatabase(){
+  if(!confirm("Delete ALL student records from the Google Sheet? This cannot be undone.")) return;
+  await apiPost({ action:"resetAll" });
+  await new Promise(r=>setTimeout(r,900));
+  await loadStudentsFromSheet();
+  showToast("All records deleted.");
+  go("dashboard");
+}
+
+/* ============ CHANGE PASSWORD ============ */
+function changePasswordPage(){
+ return `<div class="card">
+  <div class="card-header"><div><h2>🔑 Change Admin Password</h2><p>Updates the credentials stored in the Google Sheet</p></div><span class="badge">SECURITY</span></div>
+  <div class="card-body">
+   <div style="max-width:500px;">
+    <div id="cpError" style="color:#dc2626;font-size:13px;min-height:22px;margin-bottom:12px;font-weight:bold;"></div>
+    <div id="cpSuccess" style="color:#16a34a;font-size:13px;min-height:22px;margin-bottom:12px;font-weight:bold;"></div>
+    <div class="field" style="margin-bottom:16px;"><label>Current Password</label><input id="cp_current" type="password" placeholder="Enter current password"></div>
+    <div class="field" style="margin-bottom:16px;"><label>New Username (optional)</label><input id="cp_username" type="text" placeholder="Leave blank to keep current username" value="${esc(adminCredentials.username)}"></div>
+    <div class="field" style="margin-bottom:16px;"><label>New Password</label><input id="cp_new" type="password" placeholder="Enter new password"></div>
+    <div class="field" style="margin-bottom:16px;"><label>Confirm New Password</label><input id="cp_confirm" type="password" placeholder="Re-enter new password"></div>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:20px;font-size:12px;color:#475569;">
+     <strong>Password Requirements:</strong>
+     <ul style="margin:6px 0 0 18px;"><li>Minimum 6 characters</li><li>Must include at least one letter and one number</li></ul>
+    </div>
+    <div class="actions">
+     <button class="btn btn-primary" id="cpBtn" onclick="updatePassword()">✓ Update Credentials</button>
+     <button class="btn btn-light" onclick="go('dashboard')">Cancel</button>
+    </div>
+   </div>
+  </div>
+ </div>`;
+}
+async function updatePassword(){
+  const current=document.getElementById("cp_current").value;
+  const newUsername=document.getElementById("cp_username").value.trim();
+  const newPass=document.getElementById("cp_new").value;
+  const confirmPass=document.getElementById("cp_confirm").value;
+  const errEl=document.getElementById("cpError");
+  const sucEl=document.getElementById("cpSuccess");
+  const btn=document.getElementById("cpBtn");
+  errEl.textContent=""; sucEl.textContent="";
+  if(current!==adminCredentials.password){ errEl.textContent="Current password is incorrect."; return; }
+  if(newUsername && newUsername.length<3){ errEl.textContent="Username must be at least 3 characters long."; return; }
+  if(!newPass){ errEl.textContent="New password cannot be empty."; return; }
+  if(newPass.length<6){ errEl.textContent="New password must be at least 6 characters long."; return; }
+  if(!/[a-zA-Z]/.test(newPass) || !/[0-9]/.test(newPass)){ errEl.textContent="New password must contain at least one letter and one number."; return; }
+  if(newPass!==confirmPass){ errEl.textContent="New password and confirm password do not match."; return; }
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Updating...';
+  const finalUser = newUsername || adminCredentials.username;
+  await apiPost({ action:"saveCredentials", username: finalUser, password: newPass });
+  adminCredentials.username = finalUser;
+  adminCredentials.password = newPass;
+  sucEl.textContent="Credentials updated successfully!";
+  showToast("Admin credentials updated successfully.");
+  btn.disabled=false; btn.textContent="✓ Update Credentials";
+  document.getElementById("cp_current").value="";
+  document.getElementById("cp_new").value="";
+  document.getElementById("cp_confirm").value="";
+}
+
+/* ============ PRINT ENGINE ============ */
+function printDatabase(){
+  if(!students.length){ alert("No student records available to print."); return; }
+  openPrintWindow(students, "", "Complete Student Database");
+}
+function printByClass(){
+  const cls = document.getElementById("printClass").value;
+  if(!cls){ alert("Please select a class first."); return; }
+  const filtered = students.filter(s => String(s.className || "").toUpperCase() === cls.toUpperCase());
+  if(!filtered.length){ alert("No students found for class: " + cls); return; }
+  openPrintWindow(filtered, "Class - " + cls, "Class-wise Student List");
+}
+function printByYear(){
+  const yr = document.getElementById("printYear").value;
+  if(!yr){ alert("Please select an academic year first."); return; }
+  const filtered = students.filter(s => String(s.academicYear || "") === yr);
+  if(!filtered.length){ alert("No students found for academic year: " + yr); return; }
+  openPrintWindow(filtered, "Year - " + yr, "Year-wise Student List");
+}
+function openPrintWindow(list, filterLabel, title){
+  const name = (s) => [s.firstName, s.middleName, s.lastName].filter(Boolean).join(" ");
+
+  const rows = list.map(s => `
+    <tr>
+      <td>${esc(s.academicYear)}</td>
+      <td>${esc(s.rollNo)}</td>
+      <td>${esc(s.enrollmentNo)}</td>
+      <td>${esc(name(s))}</td>
+      <td>${esc(s.gender)}</td>
+      <td>${esc(s.studentCategory)}</td>
+      <td>${esc(s.birthDate)}</td>
+      <td>${esc(s.className)}</td>
+      <td>${esc(s.studentContact)}</td>
+      <td>${esc(s.parentsContact)}</td>
+      <td>${esc(s.motherContact)}</td>
+      <td>${esc(s.email)}</td>
+      <td>${esc(s.bloodGroup)}</td>
+      <td>${esc(s.currentAddress)}</td>
+      <td>${esc(s.permanentAddress)}</td>
+    </tr>`).join("");
+
+  const filterLine = filterLabel ? filterLabel : "";
+
+  const printWindow = window.open("", "_blank", "width=1200,height=800");
+  if(!printWindow){ alert("Please allow pop-ups in your browser to print the database."); return; }
+
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>JSPM Student Database — ${esc(title)}</title>
+      <style>
+        @page{size:A4 landscape;margin:10mm}
+        *{box-sizing:border-box}
+        body{font-family:Arial,Helvetica,sans-serif;color:#000;margin:0;background:#fff}
+        .print-header{text-align:center;margin-bottom:14px;line-height:1.5}
+        .print-header h1{font-size:18px;margin:0;letter-spacing:0.5px;font-weight:bold}
+        .print-header .line2{font-size:13px;margin:0;font-weight:normal}
+        .print-header .line3{font-size:13px;margin:0;font-weight:normal}
+        .print-header .line4{font-size:13px;margin:4px 0 0;font-weight:bold}
+        table{width:100%;border-collapse:collapse;font-size:8px;margin-top:6px}
+        th,td{border:1px solid #333;padding:4px 3px;text-align:left;vertical-align:top;word-break:break-word}
+        th{font-weight:bold;background:#e5e7eb;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+        thead{display:table-header-group}
+        tr{page-break-inside:avoid}
+        .print-footer{margin-top:10px;font-size:9px;display:flex;justify-content:space-between}
+      </style>
+    </head>
+    <body>
+      <div class="print-header">
+        <h1>JAYAWANTRAO SAWANT POLYTECHNIC</h1>
+        <p class="line2">Hadapsar, Pune</p>
+        <p class="line3">Computer Engineering</p>
+        ${filterLine ? `<p class="line4">${esc(filterLine)}</p>` : ""}
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Academic Year</th><th>Roll No</th><th>Enrollment No</th><th>Name</th><th>Gender</th>
+            <th>Category</th><th>Birth Date</th><th>Class</th><th>Student Contact</th>
+            <th>Parents Contact</th><th>Mother Contact</th><th>Email</th><th>Blood Group</th>
+            <th>Current Address</th><th>Permanent Address</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+
+      <div class="print-footer">
+        <span>Printed on: ${new Date().toLocaleString("en-IN")}</span>
+        <span>Total Records: ${list.length}</span>
+      </div>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.focus();
+  setTimeout(()=>{ printWindow.print(); printWindow.close(); }, 400);
+}
+
+/* ============ EXPORT / TEMPLATE ============ */
+function exportCSV(){
+ if(!students.length){alert("No student records available.");return}
+ const titleRow=["JAYAWANTRAO SAWANT POLYTECHNIC - COMPUTER ENGINEERING STUDENT DATABASE"];
+ const subTitleRow=["Hadapsar, Pune - Student Database Records"];
+ const headers=Object.keys(defaultForm);
+ const labels=["Academic Year","Roll No","Enrollment No","First Name","Middle Name","Last Name","Gender","Students Category","Birth Date","Student Contact","Parents Contact","Mother Contact","Email","Blood Group","Class","Current Address","Permanent Address"];
+ const rows=[titleRow,subTitleRow,[],labels,...students.map(s=>headers.map(h=>s[h]||""))];
+ const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob(["\ufeff" + csv],{type:"text/csv;charset=utf-8;"}));
+ a.download="JSPM_Student_Database.csv";
+ a.click();
+}
+function downloadTemplate(){
+ const titleRow=["JAYAWANTRAO SAWANT POLYTECHNIC - COMPUTER ENGINEERING STUDENT DATABASE TEMPLATE"];
+ const labels=["Academic Year","Roll No","Enrollment No","First Name","Middle Name","Last Name","Gender","Students Category","Birth Date","Student Contact","Parents Contact","Mother Contact","Email","Blood Group","Class","Current Address","Permanent Address"];
+ const rows=[titleRow, [], labels];
+ const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob(["\ufeff" + csv],{type:"text/csv;charset=utf-8;"}));
+ a.download="JSPM_Student_Template.csv";
+ a.click();
+}
+
+/* ============ STUDENT APP ============ */
+function studentApp(){
+ document.getElementById("root").innerHTML=`
+ <div class="app">
+  <aside class="sidebar">
+   <div class="brand"><div class="brand-logo">JS</div><h2>Jayawantrao Sawant Polytechnic</h2><p>Hadapsar, Pune</p></div>
+   <nav class="nav">
+    <button class="active" onclick="goStudentForm()"><span class="nav-icon">＋</span>Student Form</button>
+    <button onclick="logout()" style="margin-top:20px;background:#dc2626;color:#fff"><span class="nav-icon">↪</span>Logout</button>
+   </nav>
+  </aside>
+  <main class="main">
+   <header class="topbar"><div class="top-title"><h1>Jayawantrao Sawant Polytechnic, Hadapsar, Pune</h1><p>Computer Engineering Student Database</p></div><div class="college-badge">COMP · STUDENT</div></header>
+   <div class="content">
+    <div class="card"><div class="card-header"><div><h2>Student Registration Form</h2><p>All fields are compulsory. Fill in your information and submit.</p></div><span class="badge">STUDENT</span></div><div class="card-body">
+      <div class="student-only-note">You have access to the form only. Student database, edit, delete, import, export and settings are not available.</div>
+      ${formHTML("student")}
+    </div></div>
+   </div>
+  </main>
+ </div>`;
+}
+
+render();
+</script>
+</body>
+</html>
